@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контактна форма</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="form-card">
+            <div class="form-header">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="10" fill="url(#grad)"/>
+                        <path d="M9 16l5 5 9-9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C63FF"/>
+                                <stop offset="1" stop-color="#3ECFCF"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="form-title">Зв'яжіться з нами</h1>
+                <p class="form-subtitle">Заповніть форму, і ми обов'язково відповімо</p>
+            </div>
+
+            <div id="alertSuccess" class="alert alert--success" role="alert" style="display:none;">
+                <svg class="alert__icon" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#22c55e" fill-opacity=".15"/>
+                    <path d="M6 10l3 3 5-5" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Дякуємо! Ваше повідомлення успішно надіслано.</span>
+            </div>
+
+            <div id="alertError" class="alert alert--error" role="alert" style="display:none;">
+                <svg class="alert__icon" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#ef4444" fill-opacity=".15"/>
+                    <path d="M10 6v4M10 13v1" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                <span>Помилка відправки. Спробуйте ще раз.</span>
+            </div>
+
+            <form id="contactForm" class="contact-form" novalidate>
+                <input type="hidden" name="access_key" value="242e077f-8ef3-407e-92cd-97891e79c6b1">
+                <input type="hidden" name="subject" value="6weeks - Форма заповнена">
+                <input type="hidden" name="from_name" value="6weeks Form">
+                <input type="checkbox" name="botcheck" style="display:none;">
+
+                <div class="form-group" id="groupName">
+                    <label class="form-label" for="name">
+                        Ім'я
+                        <span class="label-optional">необов'язкове</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 20 20" fill="none">
+                                <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 1.79-8 4v1h16v-1c0-2.21-3.582-4-8-4z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Ваше ім'я" autocomplete="given-name">
+                    </div>
+                </div>
+
+                <div class="form-group" id="groupEmail">
+                    <label class="form-label" for="email">
+                        Email
+                        <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 20 20" fill="none">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" fill="currentColor"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group" id="groupMessage">
+                    <label class="form-label" for="message">
+                        Повідомлення
+                        <span class="label-optional">необов'язкове</span>
+                    </label>
+                    <textarea id="message" name="message" class="form-input form-textarea" placeholder="Ваше повідомлення..." rows="5"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btnSubmit">
+                    <span class="btn-submit__text">Надіслати повідомлення</span>
+                    <svg class="btn-submit__icon" viewBox="0 0 20 20" fill="none">
+                        <path d="M2.94 18.33l16.67-8.33L2.94 1.67v5.56L13.33 10l-10.39 2.77v5.56z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <p class="footer-note">
+            Поля, позначені <span>*</span>, є обов'язковими для заповнення
+        </p>
+    </div>
+
+    <script>
+        const form      = document.getElementById('contactForm');
+        const emailInp  = document.getElementById('email');
+        const btn       = document.getElementById('btnSubmit');
+        const alertOk   = document.getElementById('alertSuccess');
+        const alertErr  = document.getElementById('alertError');
+
+        emailInp.addEventListener('input', function () {
+            const g = document.getElementById('groupEmail');
+            const e = g.querySelector('.form-error');
+            if (e && this.validity.valid) {
+                g.classList.remove('form-group--error');
+                e.remove();
+            }
+        });
+
+        form.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            alertOk.style.display = 'none';
+            alertErr.style.display = 'none';
+
+            const email = emailInp.value.trim();
+            const group = document.getElementById('groupEmail');
+            const existing = group.querySelector('.form-error');
+
+            if (!email) {
+                group.classList.add('form-group--error');
+                if (!existing) showError(group, 'Email є обов\'язковим полем.');
+                emailInp.focus();
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                group.classList.add('form-group--error');
+                if (!existing) showError(group, 'Введіть коректний Email.');
+                emailInp.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('btn-submit--loading');
+
+            try {
+                const data = new FormData(form);
+                const res  = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: data
+                });
+                const json = await res.json();
+
+                if (json.success) {
+                    alertOk.style.display = 'flex';
+                    form.reset();
+                    alertOk.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    alertErr.style.display = 'flex';
+                }
+            } catch (e) {
+                alertErr.style.display = 'flex';
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('btn-submit--loading');
+            }
+        });
+
+        function showError(group, msg) {
+            const p = document.createElement('p');
+            p.className = 'form-error';
+            p.setAttribute('role', 'alert');
+            p.innerHTML = `<svg viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="8" fill="#ef4444" fill-opacity=".12"/>
+                <path d="M8 4v4M8 11v1" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>${msg}`;
+            group.appendChild(p);
+        }
+    </script>
+</body>
+</html>
